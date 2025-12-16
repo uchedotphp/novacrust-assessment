@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme static {
+  --color-nova-gray-50: rgb(130, 130, 130);
+  --color-nova-gray-100: rgb(224, 224, 224);
+  --color-nova-gray-200: rgb(242, 242, 242);
+  --color-nova-gray-250: rgb(245, 245, 245);
+  --color-nova-gray-300: rgb(247, 247, 247);
+  --color-nova-gray-500: rgb(79, 79, 79);
+
+  --color-nova-green-50: rgb(230, 251, 242);
+  --color-nova-green-500: rgb(1, 57, 65);
+
+  --color-nova-black-500: rgb(0, 14, 16);
+}
