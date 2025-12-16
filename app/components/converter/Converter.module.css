@@ -1,0 +1,13 @@
+@reference "../../globals.css";
+
+.novaInputGroup {
+  @apply border border-nova-gray-100 rounded-nova-30 p-6 space-y-2;
+
+  .inputGroup {
+    @apply bg-transparent border-none ring-0 caret-nova-green-500 shadow-none px-0;
+  }
+
+  .inputGroupInput {
+    @apply text-nova-black-500 text-2xl font-outfit font-semibold px-0;
+  }
+}
