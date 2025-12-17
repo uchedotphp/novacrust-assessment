@@ -149,64 +149,30 @@ The converter feature uses a modular structure where:
 - **Shared validation schemas** are centralized in `schemas.ts`
 - This structure enables easy addition of new flows (cash-to-crypto, crypto-to-fiat-loan) while maintaining DRY principles
 
-## Assumptions & Trade-offs
-
-### Assumptions
-
-1. **No Backend Integration**: The application is currently front-end only. Actual conversion logic, wallet connections, and transaction processing would require backend API integration.
-
-2. **Mock Data**: Cryptocurrency options and wallet providers are hardcoded. In production, these would be fetched from an API.
-
-3. **Conversion Rates**: No real-time price fetching implemented. This would require integration with a cryptocurrency price API (e.g., CoinGecko, CoinMarketCap).
-
-4. **Wallet Connection**: UI shows wallet selection but doesn't implement actual Web3 wallet connections (would require ethers.js, wagmi, or similar).
-
-5. **Form Submission**: The converter dialog opens by default for demonstration purposes. In production, this would be controlled by user interaction.
-
 ### Trade-offs
 
 1. **UI Library Choice**:
    - **Chosen**: Radix UI + shadcn/ui
    - **Reasoning**: Unstyled, accessible primitives with full design control
-   - **Alternative**: Complete UI libraries like Chakra UI or MUI (faster but less customizable)
 
 2. **Tailwind CSS v4**:
    - **Chosen**: Latest version with CSS-first configuration
    - **Benefit**: Modern approach, better performance
    - **Trade-off**: Newer syntax, smaller ecosystem compared to v3
 
-3. **Next.js App Router**:
-   - **Chosen**: App Router (app directory)
-   - **Reasoning**: Modern React patterns, better performance
-   - **Trade-off**: More complex than Pages Router for simple apps
-
-4. **Form Validation**:
+3. **Form Validation**:
    - **Chosen**: React Hook Form + Zod
    - **Reasoning**: TypeScript-first, excellent DX, performance
-   - **Trade-off**: More setup than simple HTML5 validation
 
-5. **Component Organization**:
+4. **Component Organization**:
    - **Chosen**: Feature-based (converter/) with shared UI components
    - **Reasoning**: Scalable for larger applications
    - **Alternative**: Flat structure (simpler but less maintainable)
 
-6. **Styling Approach**:
+5. **Styling Approach**:
    - **Chosen**: Tailwind utility classes with custom CSS variables
    - **Reasoning**: Rapid development, consistent design system
    - **Trade-off**: Learning curve, potential class name verbosity
-
-## Future Enhancements
-
-- Implement actual Web3 wallet integration
-- Add real-time cryptocurrency price fetching
-- Backend API for conversion processing
-- Implement "Cash to Crypto" and "Crypto to Fiat Loan" features
-- Add transaction history
-- User authentication and account management
-- Dark mode support (theme infrastructure already in place)
-- Multi-language support
-- Enhanced error handling and loading states
-- Unit and integration tests
 
 ## Browser Support
 
@@ -214,17 +180,3 @@ The converter feature uses a modular structure where:
 - Firefox (latest)
 - Safari (latest)
 - Edge (latest)
-
-## License
-
-This project was created as an assessment for Novacrust.
-
-## Learn More
-
-To learn more about the technologies used:
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://react.dev)
-- [Tailwind CSS](https://tailwindcss.com/docs)
-- [Radix UI](https://www.radix-ui.com)
-- [shadcn/ui](https://ui.shadcn.com)
