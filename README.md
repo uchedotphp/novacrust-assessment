@@ -4,11 +4,19 @@ A modern cryptocurrency converter application built for the Novacrust assessment
 
 ## Features
 
-- **Crypto to Cash Conversion**: Convert ETH and USDT (across multiple networks) to cash
-- **Multiple Wallet Support**: Integration with MetaMask, Rainbow, and WalletConnect
+- **Multi-Step Crypto to Cash Flow**: Complete conversion process with guided steps
+  - Amount selection with crypto/currency dropdowns
+  - Bank account details collection
+  - Contact information (email & phone with country codes)
+  - Crypto transfer instructions with copy functionality
+  - Transaction success confirmation
+- **Multiple Wallet Support**: Integration with MetaMask, Rainbow, WalletConnect, and other crypto wallets
 - **Multi-Network USDT**: Support for USDT on BNB Chain, Celo, and TON networks
+- **Copy to Clipboard**: One-click copy for wallet addresses, amounts, and transaction IDs with visual feedback
+- **Toast Notifications**: User-friendly feedback with Sonner toast library
 - **Modern UI**: Built with Radix UI components and Tailwind CSS v4
 - **Form Validation**: Robust form handling with React Hook Form and Zod
+- **Input Sanitization**: Number-only inputs for account numbers and phone numbers
 - **Responsive Design**: Mobile-first approach with custom styling
 
 ## Tech Stack
@@ -17,8 +25,9 @@ A modern cryptocurrency converter application built for the Novacrust assessment
 - **Runtime**: React 19.2.1
 - **Language**: TypeScript 5
 - **Styling**: Tailwind CSS v4
-- **UI Components**: Radix UI primitives
+- **UI Components**: Radix UI primitives (shadcn/ui)
 - **Form Management**: React Hook Form with Zod validation
+- **Notifications**: Sonner (toast library)
 - **Icons**: Lucide React, React Icons
 
 ## Setup Instructions
@@ -83,30 +92,62 @@ novacrust/
 │   ├── assets/
 │   │   └── styles/          # Custom CSS files
 │   ├── components/
-│   │   └── converter/       # Converter feature components
+│   │   └── converter/       # Converter feature (modular structure)
+│   │       ├── crypto-to-cash/
+│   │       │   ├── index.tsx      # Crypto to cash flow logic
+│   │       │   └── schema.ts      # Flow-specific validation schemas
+│   │       ├── BankDetails.tsx    # Reusable bank account form
+│   │       ├── ContactForm.tsx    # Reusable contact info form
+│   │       ├── SendCrypto.tsx     # Crypto transfer instructions
+│   │       ├── TransactionSuccess.tsx  # Success confirmation screen
+│   │       ├── SetAmount.tsx      # Amount input with crypto/currency selection
+│   │       ├── SelectOption.tsx   # Generic option selector
+│   │       ├── schemas.ts         # Shared validation schemas
+│   │       └── index.tsx          # Main converter dialog with tabs
 │   ├── globals.css          # Global styles and Tailwind config
-│   ├── layout.tsx           # Root layout
+│   ├── layout.tsx           # Root layout with toast provider
 │   └── page.tsx             # Home page
 ├── components/
 │   ├── ui/                  # Reusable UI components (shadcn/ui)
 │   └── ComingSoon.tsx       # Placeholder component
 ├── lib/
 │   └── utils.ts             # Utility functions
-├── public/                  # Static assets (icons, images)
+├── public/                  # Static assets (icons, SVGs)
 └── package.json
 ```
 
 ## Key Components
 
-- **Converter**: Main dialog component with tabbed interface
-  - Crypto to Cash (implemented)
+### Flow Components
+
+- **Converter** (`converter/index.tsx`): Main dialog with tabbed interface and tab visibility control
+  - Crypto to Cash (✓ implemented)
   - Cash to Crypto (coming soon)
   - Crypto to Fiat Loan (coming soon)
 
-- **CryptoToCash**: Step-by-step conversion flow
-  - Amount selection
-  - Cryptocurrency selection (ETH, USDT-BNB, USDT-Celo, USDT-TON)
-  - Wallet provider selection (MetaMask, Rainbow, WalletConnect)
+- **CryptoToCash** (`crypto-to-cash/index.tsx`): Complete multi-step conversion flow
+  1. Amount selection with crypto/currency options
+  2. Bank account details (BankDetails component)
+  3. Contact information (ContactForm component)
+  4. Crypto transfer instructions (SendCrypto component)
+  5. Transaction success confirmation (TransactionSuccess component)
+
+### Reusable Components
+
+- **BankDetails**: Generic bank account form with dropdown for bank selection and validated account number input
+- **ContactForm**: Contact information form with email validation and phone number with country code selector
+- **SendCrypto**: Displays wallet address, amount, network info with copy-to-clipboard functionality
+- **TransactionSuccess**: Success screen with transaction ID and "Go back to home" action
+- **SetAmount**: Amount input with crypto/currency dropdown and search functionality
+- **SelectOption**: Generic option selector component
+
+### Component Organization
+
+The converter feature uses a modular structure where:
+- **Flow-specific logic** lives in dedicated directories (`crypto-to-cash/`)
+- **Reusable components** are shared at the converter level
+- **Shared validation schemas** are centralized in `schemas.ts`
+- This structure enables easy addition of new flows (cash-to-crypto, crypto-to-fiat-loan) while maintaining DRY principles
 
 ## Assumptions & Trade-offs
 
