@@ -41,7 +41,7 @@ const SelectOption = ({ label, options, onSelect, value }: SelectOptionProps) =>
 
   return (
     <div className="space-y-4">
-      <Label htmlFor="payable" className="form-label">
+      <Label htmlFor="payable" className="form-label text-nova-green-500! mb-4">
         {label}
       </Label>
 

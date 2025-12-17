@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -7,12 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CryptoToCash from "./CryptoToCash";
+import CryptoToCash from "./crypto-to-cash";
 import ComingSoon from "@/components/ComingSoon";
 
 const Converter = () => {
+  const [showTabs, setShowTabs] = useState(true);
+
   return (
     <Dialog defaultOpen={true}>
       <form>
@@ -34,14 +38,16 @@ const Converter = () => {
           </DialogHeader>
 
           <Tabs defaultValue="cash">
-            <TabsList className="bg-nova-gray-200 font-medium text-nova-gray-50 text-sm mx-auto mb-10">
-              <TabsTrigger value="cash">Crypto to cash</TabsTrigger>
-              <TabsTrigger value="crypto">Cash to crypto</TabsTrigger>
-              <TabsTrigger value="fiat">Crypto to fiat loan</TabsTrigger>
-            </TabsList>
+            {showTabs && (
+              <TabsList className="bg-nova-gray-200 font-medium text-nova-gray-50 text-sm mx-auto mb-10">
+                <TabsTrigger value="cash">Crypto to cash</TabsTrigger>
+                <TabsTrigger value="crypto">Cash to crypto</TabsTrigger>
+                <TabsTrigger value="fiat">Crypto to fiat loan</TabsTrigger>
+              </TabsList>
+            )}
 
             <TabsContent value="cash">
-              <CryptoToCash />
+              <CryptoToCash onTabsVisibilityChange={setShowTabs} />
             </TabsContent>
 
             <TabsContent value="crypto">

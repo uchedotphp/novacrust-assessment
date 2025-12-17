@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit, Instrument_Sans } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -28,6 +29,7 @@ export default function RootLayout({
         className={`${outfit.variable} ${instrumentSans.variable} font-outfit! antialiased h-full w-full`}
       >
         {children}
+        <Toaster position="top-center" />
       </body>
     </html>
   );

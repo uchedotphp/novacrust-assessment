@@ -1,43 +1,38 @@
 "use client";
 
-import SetAmount from "./SetAmount";
-import SelectOption from "./SelectOption";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import SetAmount from "../SetAmount";
+import SelectOption from "../SelectOption";
+import BankDetails from "../BankDetails";
+import ContactForm from "../ContactForm";
+import SendCrypto from "../SendCrypto";
+import TransactionSuccess from "../TransactionSuccess";
+import { cryptoToCashSchema, type CryptoToCashFormValues } from "./schema";
 
 const walletOptions = [
   { label: "Metamask", icon: "/metamask.svg" },
   { label: "Rainbow", icon: "/rainbow.svg" },
   { label: "WalletConnect", icon: "/walletconnect.svg" },
-  {
-    label: "Other Crypto Wallets (Binance, Conibase, Bybit etc)",
-    icon: "/wallet.svg",
-  },
+  { label: "Other Crypto Wallets (Binance, Conibase, Bybit etc)", icon: "/wallet.svg" },
 ];
 
-const formSchema = z.object({
-  payAmount: z
-    .string()
-    .min(1, "Amount is required")
-    .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
-      message: "Amount must be greater than 0",
-    }),
-  receiveAmount: z
-    .string()
-    .min(1, "Amount is required")
-    .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
-      message: "Amount must be greater than 0",
-    }),
-  payFrom: z.string().min(1, "Please select a wallet to pay from"),
-  payTo: z.string().min(1, "Please select a wallet to pay to"),
-});
+type Step = "form" | "recipient" | "contact" | "send" | "processing";
 
-const CryptoToCash = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+interface CryptoToCashProps {
+  onTabsVisibilityChange: (visible: boolean) => void;
+}
+
+const CryptoToCash = ({ onTabsVisibilityChange }: CryptoToCashProps) => {
+  const [currentStep, setCurrentStep] = useState<Step>("form");
+  const [selectedCrypto, setSelectedCrypto] = useState("ETH");
+  const [selectedCurrency, setSelectedCurrency] = useState("NGN");
+
+  const form = useForm<CryptoToCashFormValues>({
+    resolver: zodResolver(cryptoToCashSchema),
     defaultValues: {
       payAmount: "1.00",
       receiveAmount: "1.00",
@@ -46,10 +41,66 @@ const CryptoToCash = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  useEffect(() => {
+    onTabsVisibilityChange(currentStep === "form");
+  }, [currentStep, onTabsVisibilityChange]);
+
+  const onSubmit = (values: CryptoToCashFormValues) => {
     console.log("Form submitted:", values);
-    // Handle form submission
+    setCurrentStep("recipient");
   };
+
+  const handleBack = () => {
+    if (currentStep === "send") {
+      setCurrentStep("contact");
+    } else if (currentStep === "contact") {
+      setCurrentStep("recipient");
+    } else {
+      setCurrentStep("form");
+    }
+  };
+
+  const handleRecipientNext = () => {
+    setCurrentStep("contact");
+  };
+
+  const handleContactNext = () => {
+    setCurrentStep("send");
+  };
+
+  const handleSendConfirm = () => {
+    setCurrentStep("processing");
+  };
+
+  const handleGoHome = () => {
+    form.reset();
+    setCurrentStep("form");
+  };
+
+  if (currentStep === "recipient") {
+    return <BankDetails onBack={handleBack} onNext={handleRecipientNext} />;
+  }
+
+  if (currentStep === "contact") {
+    return <ContactForm onBack={handleBack} onNext={handleContactNext} />;
+  }
+
+  if (currentStep === "send") {
+    const formValues = form.getValues();
+    return (
+      <SendCrypto
+        onBack={handleBack}
+        onConfirm={handleSendConfirm}
+        crypto={selectedCrypto}
+        amount={formValues.payAmount}
+        wallet={formValues.payFrom}
+      />
+    );
+  }
+
+  if (currentStep === "processing") {
+    return <TransactionSuccess onGoHome={handleGoHome} />;
+  }
 
   return (
     <Form {...form}>
@@ -65,6 +116,9 @@ const CryptoToCash = () => {
                   name="payAmount"
                   value={field.value}
                   onChange={field.onChange}
+                  type="crypto"
+                  selectedOption={selectedCrypto}
+                  onOptionChange={setSelectedCrypto}
                 />
               </FormControl>
               <FormMessage />
@@ -83,6 +137,9 @@ const CryptoToCash = () => {
                   name="receiveAmount"
                   value={field.value}
                   onChange={field.onChange}
+                  type="currency"
+                  selectedOption={selectedCurrency}
+                  onOptionChange={setSelectedCurrency}
                 />
               </FormControl>
               <FormMessage />
